@@ -53,9 +53,13 @@
     (- high low)))
 
 (defn interquartile-range
+  ^{:doc "" }
   [data]
-  ())
-    
+  (let [sorted (sort data)
+        q1 0
+        q2 0
+        q3 0]))
+              
 (defn variance
   {:doc "Returns the variance for a collection of values.
    A measure of how far a set of numbers is spread out.
