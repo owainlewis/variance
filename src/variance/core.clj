@@ -20,21 +20,55 @@
      (let [r (range x y)]
        (median r))))
 
-(def sqrt (fn [x] (Math/sqrt x)))
-(def sin (fn [x] (Math/sin x)))
-(def cos (fn [x] (Math/cos x)))
-(def tan (fn [x] (Math/tan x)))
+(defn sqrt
+  "Returns the square root of x"
+  [x]
+  (Math/sqrt x))
 
+(defn sin [x]
+  {:doc ""}
+  (Math/sin x))
+
+(defn cos
+  {:doc "Returns the cosine of x"}
+  [x]
+  (Math/cos x))
+
+(defn tan
+  {:doc "Returns the tangent of x"}
+  [x]
+  (Math/tan x))
+
+(defn atan
+  {:doc "Returns the arc tangent of x"}
+  [x]
+  (Math/atan x))
+
+(defn rng
+  ^{:doc "Returns the range for a collection of numbers"}
+  [coll]
+  (let [sorted (sort coll)
+        low (first sorted)
+        high (last sorted)]
+    (- high low)))
+
+(defn interquartile-range
+  [data]
+  ())
+    
 (defn variance
   {:doc "Returns the variance for a collection of values.
-   A measure of how far a set of numbers is spread out"}
+   A measure of how far a set of numbers is spread out.
+   Could probably avoid doing a numeric value check here to make
+   things faster"}
   [values]
-  (def sqr (fn [x] (* x x)))
-  (let [mv (mean values)]
-    (/
-      (reduce +
-        (map #(sqr (- % mv)) values))
-          (count values))))
+  (when (every? number? values)
+    (def sqr (fn [x] (* x x)))
+    (let [mv (mean values)]
+      (/
+        (reduce +
+          (map #(sqr (- % mv)) values))
+            (count values)))))
   
 (defn standard-deviation [values]
   {:doc "In statistics and probability theory, standard deviation (represented by the symbol sigma, σ)
