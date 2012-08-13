@@ -20,29 +20,11 @@
      (let [r (range x y)]
        (median r))))
 
-(defn sqrt
-  "Returns the square root of x"
-  [x]
-  (Math/sqrt x))
-
-(defn sin [x]
-  {:doc ""}
-  (Math/sin x))
-
-(defn cos
-  {:doc "Returns the cosine of x"}
-  [x]
-  (Math/cos x))
-
-(defn tan
-  {:doc "Returns the tangent of x"}
-  [x]
-  (Math/tan x))
-
-(defn atan
-  {:doc "Returns the arc tangent of x"}
-  [x]
-  (Math/atan x))
+(defn sqrt [x] (Math/sqrt x))
+(defn sin  [x] (Math/sin x))
+(defn cos  [x] (Math/cos x))
+(defn tan  [x] (Math/tan x))
+(defn atan [x] (Math/atan x))
 
 (defn rng
   ^{:doc "Returns the range for a collection of numbers"}
