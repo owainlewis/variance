@@ -1,7 +1,6 @@
 (ns variance.core-test
-  (:use clojure.test
+  (:use midje.sweet
         variance.core))
 
-(deftest a-test
-  (testing "FIXME, I fail."
-    (is (= 0 1))))
+(facts "about mean values"
+  (mean [3, 7, 5, 13, 20, 23, 39, 23, 40, 23, 14, 12, 56, 23, 29]) => 22.0)
