@@ -4,7 +4,7 @@
 (defn mean
   {:doc "Return the mean for a set of values"}
   [values]
-  (float
+  (double
     (/ (reduce + values) (count values))))
 
 (defn median
