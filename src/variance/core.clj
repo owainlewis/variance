@@ -47,22 +47,22 @@
    A measure of how far a set of numbers is spread out.
    Could probably avoid doing a numeric value check here to make
    things faster"}
-  [values]
-  (when (every? number? values)
+  [data]
+  (when (every? number? data)
     (def sqr (fn [x] (* x x)))
-    (let [mv (mean values)]
+    (let [mv (mean data)]
       (/
         (reduce +
-          (map #(sqr (- % mv)) values))
-            (count values)))))
+          (map #(sqr (- % mv)) data))
+            (count data)))))
   
-(defn standard-deviation [values]
+(defn standard-deviation [data]
   {:doc "In statistics and probability theory, standard deviation (represented by the symbol sigma, σ)
    shows how much variation or dispersion exists from the average (mean, or expected value).
    A low standard deviation indicates that the data points tend to be very close to the mean,
    whereas high standard deviation indicates that the data points are spread out over a large
    range of values."}
-  (sqrt (variance values)))
+  (sqrt (variance data)))
 
 (defn covariance [data])
 
