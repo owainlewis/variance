@@ -25,23 +25,7 @@
 (defn cos  [x] (Math/cos x))
 (defn tan  [x] (Math/tan x))
 (defn atan [x] (Math/atan x))
-
-(defn rng
-  ^{:doc "Returns the range for a collection of numbers"}
-  [coll]
-  (let [sorted (sort coll)
-        low (first sorted)
-        high (last sorted)]
-    (- high low)))
-
-(defn interquartile-range
-  ^{:doc "" }
-  [data]
-  (let [sorted (sort data)
-        q1 0
-        q2 0
-        q3 0]))
-              
+  
 (defn variance
   {:doc "Returns the variance for a collection of values.
    A measure of how far a set of numbers is spread out.
@@ -65,7 +49,7 @@
   (sqrt (variance data)))
 
 (defn covariance
-  "Returns the covariance of two data sets"
+  {:doc "Returns the covariance of two data sets"}
   [data1 data2]
   (let [n (count data1)
         mean1 (mean data1)
@@ -78,3 +62,20 @@
         (zipmap data1 data2)))))
 
 (defn gini-coefficient [])
+
+(defn rng
+  ^{:doc "Returns the range for a collection of numbers"}
+  [coll]
+  (let [sorted (sort coll)
+        low (first sorted)
+        high (last sorted)]
+    (- high low)))
+
+(defn interquartile-range
+  ^{:doc "" }
+  [data]
+  (let [sorted (sort data)
+        q1 0
+        q2 0
+        q3 0]))
+              
