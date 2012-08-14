@@ -64,6 +64,17 @@
    range of values."}
   (sqrt (variance data)))
 
-(defn covariance [data])
+(defn covariance
+  "Returns the covariance of two data sets"
+  [data1 data2]
+  (let [n (count data1)
+        mean1 (mean data1)
+        mean2 (mean data2)]
+    (reduce + 
+      (map (fn [[x y]]
+             (let [a (- x mean1)
+                   b (-  y mean2)]
+             (/ (* a b) n)))
+        (zipmap data1 data2)))))
 
 (defn gini-coefficient [])
