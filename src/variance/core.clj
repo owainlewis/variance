@@ -49,10 +49,10 @@
 (defn cos  [x]   (Math/cos x))
 (defn tan  [x]   (Math/tan x))
 (defn atan [x]   (Math/atan x))
-(defn pow   [x y] (Math/pow x y))
-(def E           (Math/E))
-(def PI          (Math/PI))
+(defn pow  [x y] (Math/pow x y))
 (defn exp  [x]   (Math/exp x))
+(def  E          (Math/E))
+(def  PI         (Math/PI))
 
 (defn variance
   {:doc "Returns the variance for a collection of values.
