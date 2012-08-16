@@ -26,7 +26,10 @@
 (defn geometric-mean
   "A type of mean or average, which indicates the central tendency or typical
   value of a set of numbers."
-  [coll])
+  [coll]
+  (let [n (count coll)
+        sum (reduce * coll)]
+    (Math/pow sum (/ n))))
 
 (defn median
   {:doc "Returns the median value for a sequence or pair of numbers"}
@@ -41,12 +44,16 @@
      (let [r (range x y)]
        (median r))))
 
-(defn sqrt [x] (Math/sqrt x))
-(defn sin  [x] (Math/sin x))
-(defn cos  [x] (Math/cos x))
-(defn tan  [x] (Math/tan x))
-(defn atan [x] (Math/atan x))
-  
+(defn sqrt [x]   (Math/sqrt x))
+(defn sin  [x]   (Math/sin x))
+(defn cos  [x]   (Math/cos x))
+(defn tan  [x]   (Math/tan x))
+(defn atan [x]   (Math/atan x))
+(defn pow   [x y] (Math/pow x y))
+(def E           (Math/E))
+(def PI          (Math/PI))
+(defn exp  [x]   (Math/exp x))
+
 (defn variance
   {:doc "Returns the variance for a collection of values.
    A measure of how far a set of numbers is spread out.
