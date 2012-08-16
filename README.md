@@ -2,9 +2,14 @@
 
 A Clojure library designed to ... well, that part is up to you.
 
-## Usage
+FUNCTIONS
+------------------
 
-FIXME
+<table>
+<tr><td>Function</td><td>Test</td></tr>
+<tr><td>A</td><td>A</td></tr>
+
+</table>
 
 ## License
 
