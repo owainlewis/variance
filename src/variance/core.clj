@@ -17,6 +17,11 @@
        (double 
          (/ n (reduce + (map #(/ 1 %) coll)))))))
 
+(defn geometric-mean
+  "A type of mean or average, which indicates the central tendency or typical
+  value of a set of numbers."
+  [coll])
+
 (defn median
   {:doc "Returns the median value for a sequence or pair of numbers"}
   ([data]
