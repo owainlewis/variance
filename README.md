@@ -1,4 +1,4 @@
-# variance
+# Variance
 
 A library of useful statistics functions.
 
@@ -6,7 +6,7 @@ FUNCTIONS
 ------------------
 
 <table>
-<tr><td>Function</td><td>Tests</td></tr>
+<tr><th>Function</th><th>Tests</th></tr>
 <tr><td>Mean</td><td></td></tr>
 <tr><td>Range</td><td></td></tr>
 <tr><td>Harmonic Mean</td><td></td></tr>
