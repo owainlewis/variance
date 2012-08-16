@@ -7,6 +7,16 @@
   (double
     (/ (reduce + values) (count values))))
 
+(defn harmonic-mean
+  "The harmonic mean is the reciprocal of the arithmetic mean of the reciprocals.
+   As it tends strongly toward the least elements of the list,
+   it may (compared to the arithmetic mean) mitigate the influence of large outliers
+   and to increase the influence of small values."
+  ([coll]
+     (let [n (count coll)]
+       (double 
+         (/ n (reduce + (map #(/ 1 %) coll)))))))
+
 (defn median
   {:doc "Returns the median value for a sequence or pair of numbers"}
   ([data]
