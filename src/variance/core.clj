@@ -1,11 +1,15 @@
 (ns variance.core
   {:doc "A collection of useful math/stat functions"})
 
-(defn mean
-  {:doc "Return the mean for a set of values"}
-  [values]
-  (double
-    (/ (reduce + values) (count values))))
+(defn arithmetic-mean
+  {:doc "Return the arithmetic mean for a set of values"}
+  ([values]
+    (double
+      (/ (reduce + values) (count values))))
+  ([x y]
+    (mean [x y])))
+
+(def mean arithmetic-mean)
 
 (defn harmonic-mean
   "The harmonic mean is the reciprocal of the arithmetic mean of the reciprocals.
@@ -15,8 +19,10 @@
   ([coll]
      (let [n (count coll)]
        (double 
-         (/ n (reduce + (map #(/ 1 %) coll)))))))
-
+        (/ n (reduce + (map #(/ %) coll))))))
+  ([x y] (harmonic-mean [x y])))
+    
+ 
 (defn geometric-mean
   "A type of mean or average, which indicates the central tendency or typical
   value of a set of numbers."
