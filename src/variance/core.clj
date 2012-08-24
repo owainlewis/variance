@@ -1,13 +1,26 @@
 (ns variance.core
   {:doc "A collection of useful math/stat functions"})
 
+(defn dot-product
+  "Pairwise product of two vectors that that works for double arrays
+   (def ds (double-array (range 3 20)))"
+  [^doubles ws ^doubles xs]
+  (areduce ws idx sum (float 0)
+           (+ sum (* (aget ws idx)
+                     (aget xs idx)))))
+
+(defn dot-p
+  "A simple non optimized dot product fn"
+  [x y]
+  (reduce + (map * x y)))
+
 (defn arithmetic-mean
   {:doc "Return the arithmetic mean for a set of values"}
   ([values]
     (double
       (/ (reduce + values) (count values))))
   ([x y]
-    (mean [x y])))
+    (arithmetic-mean [x y])))
 
 (def mean arithmetic-mean)
 
@@ -21,8 +34,7 @@
        (double 
         (/ n (reduce + (map #(/ %) coll))))))
   ([x y] (harmonic-mean [x y])))
-    
- 
+     
 (defn geometric-mean
   "A type of mean or average, which indicates the central tendency or typical
   value of a set of numbers."
@@ -89,8 +101,6 @@
              (/ (* a b) n)))
         (zipmap data1 data2)))))
 
-(defn gini-coefficient [])
-
 (defn rng
   ^{:doc "Returns the range for a collection of numbers"}
   [coll]
@@ -99,11 +109,4 @@
         high (last sorted)]
     (- high low)))
 
-(defn interquartile-range
-  ^{:doc "" }
-  [data]
-  (let [sorted (sort data)
-        q1 0
-        q2 0
-        q3 0]))
-              
+(defn gini-coefficient [])
