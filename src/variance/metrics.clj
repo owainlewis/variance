@@ -14,7 +14,8 @@
    (/ (count (intersection x y)) (count (union x))))
 
 (defn jaccard-distance
-  "measures dissimilarity between sample sets, is complementary to the Jaccard coefficient and is obtained by subtracting the Jaccard coefficient from 1"
+  "measures dissimilarity between sample sets, is complementary to the Jaccard
+   coefficient and is obtained by subtracting the Jaccard coefficient from 1"
   [a b] (- 1 (jaccard-index a b)))
 
 (defn manhattan-distance
@@ -27,7 +28,9 @@
 (defn minkowski-distance [])
 
 (defn levenshtein-distance
-  "The Levenshtein distance between two strings is defined as the minimum number of edits needed to transform one string into the other, with the allowable edit operations being insertion, deletion, or substitution of a single character. "
+  "The Levenshtein distance between two strings is defined as the minimum number
+   of edits needed to transform one string into the other, with the allowable edit
+   operations being insertion, deletion, or substitution of a single character. "
   [^String s1 ^String s2]
   (let [m (count s1)
         n (count s2)]))
