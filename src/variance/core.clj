@@ -1,6 +1,7 @@
 (ns variance.core
-  {:doc "A collection of useful math/stat functions"})
-
+  {:doc "A collection of useful math/stat functions"}
+  (:use [variance.metrics]))
+  
 (defn dot-product
   "Pairwise product of two vectors that that works for double arrays
    (def ds (double-array (range 3 20)))"
