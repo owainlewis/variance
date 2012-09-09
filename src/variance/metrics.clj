@@ -18,7 +18,7 @@
    coefficient and is obtained by subtracting the Jaccard coefficient from 1"
   [a b] (- 1 (jaccard-index a b)))
 
-(defn manhattan-distance
+(defn manhattan-distance0
   "Returns the manhattan/taxicab distance
    between two points x and y"
   [x y]
