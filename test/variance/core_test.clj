@@ -41,6 +41,11 @@
   (int (standard-deviation [600 470 170 430 300]))
   => 147))
 
+(deftest values-less-test
+  (facts "about values-less-or-equal"
+    (let [data [1 2 3 4 5]]
+      (values-less-or-equal data 3) => '(1 2 3))))      
+
 (deftest cdf-test
   (facts "about cumulative-distribution"
     (let [data [1 2 2 3 5]]
