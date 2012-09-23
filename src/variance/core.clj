@@ -162,5 +162,4 @@
 (defn sigmoid
   "A logistic function or logistic sigmoid curve"
   [t]
-  (/ 1
-    (+ 1 (exp t))))
+  (/ 1 (+ 1 (exp t))))
