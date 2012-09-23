@@ -59,14 +59,17 @@
 
 (defn mode [coll]
   "A collection of values can have more than one mode in which case it is
-   called multimodal or bimodal. Returns the modal value(s)
-   collection of values"
+   called multimodal or bimodal. Returns the modal value(s)"
   (let [frequency-distribution (frequencies coll)
         sorted (sort-by (comp - second) frequency-distribution)
         mxfreq (second (first sorted))]
     (map first
   (take-while (fn [[val freq]]
     (= mxfreq freq)) sorted))))
+
+;; ===========================
+;; Useful math functions
+;; ===========================
 
 (defn sqrt [x]   (Math/sqrt x))
 (defn sin  [x]   (Math/sin x))
@@ -117,10 +120,6 @@
         low (first sorted)
         high (last sorted)]
     (- high low)))
-
-;; TODO
-
-(defn gini-coefficient [])
 
 (defn values-less-or-equal
   "Items from values less than or equal to n"
