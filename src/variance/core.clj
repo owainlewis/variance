@@ -11,15 +11,15 @@
                      (aget xs idx)))))
 
 (defn dot-p
-  "A simple non optimized dot product fn"
+  "A simple non optimized dot product function"
   [x y]
   (reduce + (map * x y)))
 
 (defn arithmetic-mean
   {:doc "Return the arithmetic mean for a set of values"}
-  ([values]
+  ([coll]
     (double
-      (/ (reduce + values) (count values))))
+      (/ (reduce + coll) (count coll))))
   ([x y]
     (arithmetic-mean [x y])))
 
@@ -46,9 +46,9 @@
 
 (defn median
   {:doc "Returns the median value for a sequence or pair of numbers"}
-  ([data]
-    (let [sorted (sort data)
-        count (count data)
+  ([coll]
+    (let [sorted (sort coll)
+        count (count coll)
         mid-point (bit-shift-right count 1)]
       (if (odd? count)
         (nth sorted mid-point)
@@ -57,10 +57,25 @@
      (let [r (range x y)]
        (median r))))
 
+(defn mode [coll]
+  "A collection of values can have more than one mode in which case it is
+   called multimodal or bimodal. Returns the modal value(s)"
+  (let [frequency-distribution (frequencies coll)
+        sorted (sort-by (comp - second) frequency-distribution)
+        mxfreq (second (first sorted))]
+    (map first
+  (take-while (fn [[val freq]]
+    (= mxfreq freq)) sorted))))
+
+;; ===========================
+;; Useful math functions
+;; ===========================
+
 (defn sqrt [x]   (Math/sqrt x))
 (defn sin  [x]   (Math/sin x))
 (defn cos  [x]   (Math/cos x))
 (defn tan  [x]   (Math/tan x))
+(defn log  [x]   (Math/log x))
 (defn atan [x]   (Math/atan x))
 (defn pow  [x y] (Math/pow x y))
 (defn exp  [x]   (Math/exp x))
@@ -69,17 +84,14 @@
 
 (defn variance
   {:doc "Returns the variance for a collection of values.
-   A measure of how far a set of numbers is spread out.
-   Could probably avoid doing a numeric value check here to make
-   things faster"}
+   A measure of how far a set of numbers is spread out."}
   [data]
-  (when (every? number? data)
     (def sqr (fn [x] (* x x)))
     (let [mv (mean data)]
       (/
         (reduce +
           (map #(sqr (- % mv)) data))
-            (count data)))))
+            (count data))))
   
 (defn standard-deviation [data]
   {:doc "In statistics and probability theory, standard deviation (represented by the symbol sigma, σ)
@@ -110,4 +122,44 @@
         high (last sorted)]
     (- high low)))
 
-(defn gini-coefficient [])
+(defn values-less-or-equal
+  "Items from values less than or equal to n"
+  [values n]
+  (take-while
+    (fn [x] (<= x n)) values))
+            
+(defn percentile-rank
+  "Calculates the percentile rank for a val in values"
+  [values val]
+  (let [a (count (values-less-or-equal values val))
+        b (count values)]
+    (/ (* 100 a) (double b))))
+
+;; ==============================
+;; Distribution
+;; ==============================
+
+(defn cumulative-distribution-function
+  "Similar to percentile rank but returns a probability in the range 0-1"
+  [values val]
+  (let [a (count (values-less-or-equal values val))
+        b (count values)]
+    (double 
+     (/ a b))))
+
+;; A less verbose name for cumulative-frequency-distribution
+
+(def cdf cumulative-distribution-function)
+
+(defn cdf-range
+  "Maps cdf over a range of numbers"
+  [values start end]
+  (let [func (partial cdf values)]
+    (map
+      (fn [val] (func val))
+      (range start end))))
+
+(defn sigmoid
+  "A logistic function or logistic sigmoid curve"
+  [t]
+  (/ 1 (+ 1 (exp t))))
