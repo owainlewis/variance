@@ -123,7 +123,7 @@
 (defn gini-coefficient [])
 
 (defn percentile-rank
-  ""
+  "Calculates the percentile rank for a val in values"
   [values val]
   (let [a (count
             (take-while (fn [x] (<= x val)) values))
@@ -133,3 +133,26 @@
 ;; ==============================
 ;; Distribution
 ;; ==============================
+
+(defn cumulative-distribution-function
+  "Similar to percentile rank but returns a probability in the range 0-1"
+  [values val]
+  (let [a (count
+           (take-while (fn [x] (<= x val)) values))
+        b (count values)]
+    (double 
+     (/ a b))))
+
+;; A less verbose function name
+
+(def cdf cumulative-distribution-function)
+
+(defn cdf-range
+  "Maps cdf over a range of numbers"
+  [values start end]
+  (let [func (partial cdf values)]
+    (map
+      (fn [val] (func val))
+        (range start end))))
+
+

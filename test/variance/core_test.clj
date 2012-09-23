@@ -39,4 +39,15 @@
 (deftest standard-deviation-test
 (facts "about standard-deviation"
   (int (standard-deviation [600 470 170 430 300]))
-    => 147))
+  => 147))
+
+(deftest cdf-test
+  (facts "about cumulative-distribution"
+    (let [data [1 2 2 3 5]]
+      (cdf data 2) => 0.6
+      (cdf data 3) => 0.8)))
+
+(deftest cdf-range-test
+  (facts "about cdf-range"
+    (let [data [1 2 2 3 5]]
+      (cdf-range data 1 6) => '(0.2 0.6 0.8 0.8 1.0))))
