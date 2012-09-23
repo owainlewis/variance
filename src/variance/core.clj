@@ -59,7 +59,7 @@
 
 (defn mode [coll]
   "A collection of values can have more than one mode in which case it is
-   called multimodal or bimodal. Returns the modal value(s) for a
+   called multimodal or bimodal. Returns the modal value(s)
    collection of values"
   (let [frequency-distribution (frequencies coll)
         sorted (sort-by (comp - second) frequency-distribution)
@@ -121,3 +121,15 @@
 ;; TODO
 
 (defn gini-coefficient [])
+
+(defn percentile-rank
+  ""
+  [values val]
+  (let [a (count
+            (take-while (fn [x] (<= x val)) values))
+        b (count values)]
+    (/ (* 100 a) (double b))))
+
+;; ==============================
+;; Distribution
+;; ==============================
