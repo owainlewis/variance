@@ -58,7 +58,9 @@
        (median r))))
 
 (defn mode [coll]
-  "A collection of numbers can have more than one mode in which case it is called multimodal or bimodal. Returns the modal value(s) for a collection of numbers"
+  "A collection of values can have more than one mode in which case it is
+   called multimodal or bimodal. Returns the modal value(s) for a
+   collection of values"
   (let [frequency-distribution (frequencies coll)
         sorted (sort-by (comp - second) frequency-distribution)
         mxfreq (second (first sorted))]
