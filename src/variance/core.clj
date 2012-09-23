@@ -11,15 +11,15 @@
                      (aget xs idx)))))
 
 (defn dot-p
-  "A simple non optimized dot product fn"
+  "A simple non optimized dot product function"
   [x y]
   (reduce + (map * x y)))
 
 (defn arithmetic-mean
   {:doc "Return the arithmetic mean for a set of values"}
-  ([values]
+  ([coll]
     (double
-      (/ (reduce + values) (count values))))
+      (/ (reduce + coll) (count coll))))
   ([x y]
     (arithmetic-mean [x y])))
 
@@ -46,9 +46,9 @@
 
 (defn median
   {:doc "Returns the median value for a sequence or pair of numbers"}
-  ([data]
-    (let [sorted (sort data)
-        count (count data)
+  ([coll]
+    (let [sorted (sort coll)
+        count (count coll)
         mid-point (bit-shift-right count 1)]
       (if (odd? count)
         (nth sorted mid-point)
@@ -56,6 +56,15 @@
   ([x y]
      (let [r (range x y)]
        (median r))))
+
+(defn mode [coll]
+  "A collection of numbers can have more than one mode in which case it is called multimodal or bimodal. Returns the modal value(s) for a collection of numbers"
+  (let [frequency-distribution (frequencies coll)
+        sorted (sort-by (comp - second) frequency-distribution)
+        mxfreq (second (first sorted))]
+    (map first
+  (take-while (fn [[val freq]]
+    (= mxfreq freq)) sorted))))
 
 (defn sqrt [x]   (Math/sqrt x))
 (defn sin  [x]   (Math/sin x))
@@ -69,17 +78,14 @@
 
 (defn variance
   {:doc "Returns the variance for a collection of values.
-   A measure of how far a set of numbers is spread out.
-   Could probably avoid doing a numeric value check here to make
-   things faster"}
+   A measure of how far a set of numbers is spread out."}
   [data]
-  (when (every? number? data)
     (def sqr (fn [x] (* x x)))
     (let [mv (mean data)]
       (/
         (reduce +
           (map #(sqr (- % mv)) data))
-            (count data)))))
+            (count data))))
   
 (defn standard-deviation [data]
   {:doc "In statistics and probability theory, standard deviation (represented by the symbol sigma, σ)
@@ -109,5 +115,7 @@
         low (first sorted)
         high (last sorted)]
     (- high low)))
+
+;; TODO
 
 (defn gini-coefficient [])

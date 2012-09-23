@@ -21,6 +21,13 @@
   (median 10 21) => 15
   (median [8, 3, 44, 17, 12, 6]) => 10))
 
+(deftest mode-test
+  (facts "about modal values"
+         (mode [1 2 3 3 3 4 5]) => '(3)
+         (mode [1 1 2 3]) => '(1)
+         (mode [1 1 2 2 3 3]) => '(1 2 3)
+         (mode [1 2.1 2.1 2.3 2.3 3.5]) => '(2.1 2.3)))
+
 (deftest range-test
 (facts "about rng"
   (rng [3 6 6 6 7 9 11 11 13]) => 10))
