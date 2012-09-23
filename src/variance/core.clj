@@ -75,6 +75,7 @@
 (defn sin  [x]   (Math/sin x))
 (defn cos  [x]   (Math/cos x))
 (defn tan  [x]   (Math/tan x))
+(defn log  [x]   (Math/log x))
 (defn atan [x]   (Math/atan x))
 (defn pow  [x y] (Math/pow x y))
 (defn exp  [x]   (Math/exp x))
@@ -156,4 +157,10 @@
   (let [func (partial cdf values)]
     (map
       (fn [val] (func val))
-        (range start end))))
+      (range start end))))
+
+(defn sigmoid
+  "A logistic function or logistic sigmoid curve"
+  [t]
+  (/ 1
+    (+ 1 (exp t))))
