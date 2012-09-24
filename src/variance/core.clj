@@ -7,8 +7,9 @@
    (def ds (double-array (range 3 20)))"
   [^doubles ws ^doubles xs]
   (areduce ws idx sum (float 0)
-           (+ sum (* (aget ws idx)
-                     (aget xs idx)))))
+           (+ sum 
+             (* (aget ws idx)
+                (aget xs idx)))))
 
 (defn dot-p
   "A simple non optimized dot product function"
@@ -33,7 +34,8 @@
   ([coll]
      (let [n (count coll)]
        (double 
-        (/ n (reduce + (map #(/ %) coll))))))
+        (/ n (reduce + 
+               (map #(/ %) coll))))))
   ([x y] (harmonic-mean [x y])))
      
 (defn geometric-mean
@@ -52,7 +54,9 @@
         mid-point (bit-shift-right count 1)]
       (if (odd? count)
         (nth sorted mid-point)
-        (/ (+ (nth sorted mid-point) (nth sorted (dec mid-point))) 2))))
+        (/ 
+          (+ (nth sorted mid-point) 
+             (nth sorted (dec mid-point))) 2))))
   ([x y]
      (let [r (range x y)]
        (median r))))
@@ -61,11 +65,13 @@
   "A collection of values can have more than one mode in which case it is
    called multimodal or bimodal. Returns the modal value(s)"
   (let [frequency-distribution (frequencies coll)
-        sorted (sort-by (comp - second) frequency-distribution)
+        sorted (sort-by 
+                 (comp - second) frequency-distribution)
         mxfreq (second (first sorted))]
     (map first
-  (take-while (fn [[val freq]]
-    (= mxfreq freq)) sorted))))
+  (take-while 
+    (fn [[val freq]]
+      (= mxfreq freq)) sorted))))
 
 ;; ===========================
 ;; Useful math functions
@@ -90,8 +96,9 @@
     (let [mv (mean data)]
       (/
         (reduce +
-          (map #(sqr (- % mv)) data))
-            (count data))))
+          (map 
+            #(sqr (- % mv)) data))
+              (count data))))
   
 (defn standard-deviation [data]
   {:doc "In statistics and probability theory, standard deviation (represented by the symbol sigma, σ)
