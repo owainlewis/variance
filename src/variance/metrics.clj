@@ -41,11 +41,11 @@
             result)))))
 
 (defn hamming-distance
-  ^{:doc "Measures the minimum number of substitutions required to
+  "Measures the minimum number of substitutions required to
    change one string into the other, or the number of errors
    that transformed one string into the other.
    Hamming distance only counts substitutions, and so is only suitable for equal
-   length strings"}
+   length strings"
   [^String s1 ^String s2]
   (letfn [(zip [x y] (map vector x y))]
     (when (= (count s1) (count s2))
