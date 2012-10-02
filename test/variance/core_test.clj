@@ -56,3 +56,8 @@
   (facts "about cdf-range"
     (let [data [1 2 2 3 5]]
       (cdf-range data 1 6) => '(0.2 0.6 0.8 0.8 1.0))))
+
+(deftest chisquare-test
+  (facts "about chi-square test"
+    (let [sample [[48 58] [35 34.5] [15 7] [3 0.5]]]
+      (Math/round (chi-square sample)) => 23)))

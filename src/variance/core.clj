@@ -1,7 +1,11 @@
 (ns variance.core
   {:doc "A collection of useful math/stat functions"}
   (:use [variance.metrics]))
-  
+
+;; **************************
+;; Dot product 
+;; **************************
+
 (defn dot-product
   "Pairwise product of two vectors that that works for double arrays
    (def ds (double-array (range 3 20)))"
@@ -15,6 +19,10 @@
   "A simple non optimized dot product function"
   [x y]
   (reduce + (map * x y)))
+
+;; **************************
+;; Averages
+;; **************************
 
 (defn arithmetic-mean
   {:doc "Return the arithmetic mean for a set of values"}
@@ -73,9 +81,14 @@
     (fn [[val freq]]
       (= mxfreq freq)) sorted))))
 
-;; ===========================
+;; **************************
 ;; Useful math functions
-;; ===========================
+;; **************************
+
+(defn sum
+  "Utility function for summing a sequence of values"
+  [& values]
+  (reduce + 0 values))
 
 (defn sqrt [x]   (Math/sqrt x))
 (defn sin  [x]   (Math/sin x))
@@ -83,11 +96,12 @@
 (defn tan  [x]   (Math/tan x))
 (defn log  [x]   (Math/log x))
 (defn atan [x]   (Math/atan x))
-(defn pow  [x y] (Math/pow x y))
 (defn exp  [x]   (Math/exp x))
 (def  E          (Math/E))
 (def  PI         (Math/PI))
 
+(defn pow  [base exponent] (Math/pow base exponent))
+  
 (defn variance
   {:doc "Returns the variance for a collection of values.
    A measure of how far a set of numbers is spread out."}
@@ -142,9 +156,9 @@
         b (count values)]
     (/ (* 100 a) (double b))))
 
-;; ==============================
+;; **************************
 ;; Distribution
-;; ==============================
+;; **************************
 
 (defn cumulative-distribution-function
   "Similar to percentile rank but returns a probability in the range 0-1"
@@ -170,3 +184,92 @@
   "A logistic function or logistic sigmoid curve"
   [t]
   (/ 1 (+ 1 (exp t))))
+
+(defn mapstats
+  "Inspired by a public gist by Jason Wolfe
+  Takes a map {:xs xs} and returns a map
+  of simple univariate statistics of xs
+  (mapstats {:xs [1 2 3]})"
+  [{:keys [xs]}]
+  (let [n  (count xs)
+        m  (/ (reduce + xs) n)
+        m2 (/ (reduce + (map #(* % %) xs)) n) 
+        v  (- m2 (* m m))]
+    {:n n   ; count   
+     :m m   ; mean 
+     :m2 m2 ; mean square
+     :v v   ; variance
+    }))
+
+;; *************************
+;; Chi Square
+;; **************************
+
+(defn chi-square
+  "Assumes data to be in the form
+  [[x1 observed, x1 expected] [x2 observed, x2 expected]].
+   The Chi-square test computes the sum of the squares of the differences in values"
+  [values]
+  (reduce + 0
+    (map 
+      (fn [[observed expected]]
+        (double
+          (/ (pow (- observed expected) 2)
+             expected)))
+    values)))
+
+;; **************************
+;; Binary trees
+;; **************************
+
+;; Using struct maps
+
+(defstruct binary-tree-node :root :left :right)
+
+(defn binary-tree [root]
+  (struct-map binary-tree-node
+    :root root :left nil :right nil))
+
+;; Using defrecord
+
+(defrecord TreeNode
+  [root left right])
+
+(defn tree
+  "Create a tree with a root node set"
+  [root]
+  (TreeNode. root nil nil))
+
+(defn tree-append [t val]
+  (cond
+    ;; Empty tree 
+    (nil? t)          (TreeNode. val nil nil)
+    ;; Go left 
+    (< val (:root t)) (TreeNode. (:root t) (tree-append (:left t) val) (:right t))
+    ;; Go right
+    :else             (TreeNode. (:root t) (:left t) (tree-append (:right t) val))))
+
+(defn in-order-traversal [t]
+  (when t
+    (concat
+      (in-order-traversal (:left t)) [(:root t)]
+      (in-order-traversal (:right t)))))
+
+(defn height
+  "Returns the height of a binary tree"
+  [t]
+  (if (nil? (:root t))
+    0
+    (+ 1
+      (max
+        (height (:left t))
+        (height (:right t))))))
+
+(defn tree-build
+  "Helper function for building binary trees
+   from a sequence of values"
+  [[car & cdr]]
+  (let [t (tree car)]
+    (reduce tree-append t cdr)))
+
+(comment (tree-build [2 4 1 6 7]))
