@@ -4,6 +4,11 @@
 ;; Binary trees
 ;; **************************
 
+(defprotocol BTree
+  (append [tree value])
+  (height [tree])
+  (build [& vals]))
+
 (defrecord TreeNode
   [root left right])
 
@@ -14,11 +19,8 @@
 
 (defn tree-append [t val]
   (cond
-    ;; Empty tree 
     (nil? t)          (TreeNode. val nil nil)
-    ;; Go left 
     (< val (:root t)) (TreeNode. (:root t) (tree-append (:left t) val) (:right t))
-    ;; Go right
     :else             (TreeNode. (:root t) (:left t) (tree-append (:right t) val))))
 
 (defn in-order-traversal [t]
