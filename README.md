@@ -14,6 +14,13 @@ You can include this library in your projects using leiningen
 
 ```clojure
 
+(def chi-square-test (fn []
+  (let [sample [[48 58] [35 34.5] [15 7] [3 0.5]]]
+    (chi-square sample))))
+
+(standard-deviation [600 470 170 430 300])
+
+(variance [600 470 170 430 300])
 
 ```
 

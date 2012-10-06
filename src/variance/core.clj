@@ -6,6 +6,67 @@
   [& values]
   (reduce + 0 values))
 
+;; **************************
+;; Averages
+;; **************************
+
+(defn arithmetic-mean
+  {:doc "Return the arithmetic mean for a set of values"}
+  ([coll]
+    (double
+      (/ (reduce + coll) (count coll))))
+  ([x y]
+    (arithmetic-mean [x y])))
+
+(def mean arithmetic-mean)
+
+(defn harmonic-mean
+  "The harmonic mean is the reciprocal of the arithmetic mean of the reciprocals.
+   As it tends strongly toward the least elements of the list,
+   it may (compared to the arithmetic mean) mitigate the influence of large outliers
+   and to increase the influence of small values."
+  ([coll]
+     (let [n (count coll)]
+       (double 
+        (/ n (reduce + 
+               (map #(/ %) coll))))))
+  ([x y] (harmonic-mean [x y])))
+     
+(defn geometric-mean
+  "A type of mean or average, which indicates the central tendency or typical
+  value of a set of numbers."
+  [coll]
+  (let [n (count coll)
+        sum (reduce * coll)]
+    (Math/pow sum (/ n)))) ;; Todo use pow function
+
+(defn median
+  {:doc "Returns the median value for a sequence or pair of numbers"}
+  ([coll]
+    (let [sorted (sort coll)
+        count (count coll)
+        mid-point (bit-shift-right count 1)]
+      (if (odd? count)
+        (nth sorted mid-point)
+        (/ 
+          (+ (nth sorted mid-point) 
+             (nth sorted (dec mid-point))) 2))))
+  ([x y]
+     (let [r (range x y)]
+       (median r))))
+
+(defn mode [coll]
+  "A collection of values can have more than one mode in which case it is
+   called multimodal or bimodal. Returns the modal value(s)"
+  (let [frequency-distribution (frequencies coll)
+        sorted (sort-by 
+                 (comp - second) frequency-distribution)
+        mxfreq (second (first sorted))]
+    (map first
+  (take-while 
+    (fn [[val freq]]
+      (= mxfreq freq)) sorted))))
+
 (defn sqrt [x]   (Math/sqrt x))
 (defn sin  [x]   (Math/sin x))
 (defn cos  [x]   (Math/cos x))
@@ -92,67 +153,6 @@
 
 (defn add [& values]
   (reduce + 0 values))
-
-;; **************************
-;; Averages
-;; **************************
-
-(defn arithmetic-mean
-  {:doc "Return the arithmetic mean for a set of values"}
-  ([coll]
-    (double
-      (/ (reduce + coll) (count coll))))
-  ([x y]
-    (arithmetic-mean [x y])))
-
-(def mean arithmetic-mean)
-
-(defn harmonic-mean
-  "The harmonic mean is the reciprocal of the arithmetic mean of the reciprocals.
-   As it tends strongly toward the least elements of the list,
-   it may (compared to the arithmetic mean) mitigate the influence of large outliers
-   and to increase the influence of small values."
-  ([coll]
-     (let [n (count coll)]
-       (double 
-        (/ n (reduce + 
-               (map #(/ %) coll))))))
-  ([x y] (harmonic-mean [x y])))
-     
-(defn geometric-mean
-  "A type of mean or average, which indicates the central tendency or typical
-  value of a set of numbers."
-  [coll]
-  (let [n (count coll)
-        sum (reduce * coll)]
-    (Math/pow sum (/ n)))) ;; Todo use pow function
-
-(defn median
-  {:doc "Returns the median value for a sequence or pair of numbers"}
-  ([coll]
-    (let [sorted (sort coll)
-        count (count coll)
-        mid-point (bit-shift-right count 1)]
-      (if (odd? count)
-        (nth sorted mid-point)
-        (/ 
-          (+ (nth sorted mid-point) 
-             (nth sorted (dec mid-point))) 2))))
-  ([x y]
-     (let [r (range x y)]
-       (median r))))
-
-(defn mode [coll]
-  "A collection of values can have more than one mode in which case it is
-   called multimodal or bimodal. Returns the modal value(s)"
-  (let [frequency-distribution (frequencies coll)
-        sorted (sort-by 
-                 (comp - second) frequency-distribution)
-        mxfreq (second (first sorted))]
-    (map first
-  (take-while 
-    (fn [[val freq]]
-      (= mxfreq freq)) sorted))))
 
 ;; **************************
 ;; Distribution
