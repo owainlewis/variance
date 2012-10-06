@@ -1,27 +1,49 @@
 (ns variance.metrics
-  (:use [clojure.set]))
-
-;; Distance metrics
+  (refer-clojure :exclude [])
+  (:use [clojure.set]
+        [variance.core :only [pow]]))
 
 (defn jaccard-index
   "The Jaccard coefficient measures similarity between sample sets,
    and is defined as the size of the intersection divided by the size
    of the union of the sample sets."
-   [x y]
-   (/ (count (intersection x y)) (count (union x))))
+   [p q]
+   (/ (count (intersection p q))
+        (count (union p))))
 
 (defn jaccard-distance
   "measures dissimilarity between sample sets, is complementary to the Jaccard
    coefficient and is obtained by subtracting the Jaccard coefficient from 1"
-  [a b] (- 1 (jaccard-index a b)))
+  [p q] (- 1 (jaccard-index p q)))
+
+(defn euclidean-distance
+  "returns the euclidean distance between two points.
+   Expects a and b to be a set of coordinates [x y]"
+  [p q]
+  (letfn [(square [x] (* x x))]
+    (/ 1 (+ 1 (Math/sqrt
+      (+ (square (- (first p) (first q)))
+        (square (- (second p) (second q)))))))))
+
+;; TODO check this!
 
 (defn manhattan-distance
   "Returns the manhattan/taxicab distance
    between two points x and y"
-  [x y]
-  (let [[x1 x2] x [y1 y2] y]
-    (+ (- x1 x2)) (- y1 y2)))
+  [p q]
+  (let [[x1 x2] p [y1 y2] q]
+    (+ (- x1 x2))
+      (- y1 y2)))
 
+(defn distance-graph2
+  "Return a map of various distance functions
+   e.g (distance-graph [1.4 0.5] [0.3 6.3])"
+  [p q]
+  (let [euclidean (euclidean-distance p q)
+        manhattan (manhattan-distance p q)]
+    {:euclidean euclidean
+     :manhattan manhattan}))
+        
 (defn distance-function
   "Returns a memoized distance function. You specify the functions that determine insertion and
   replacement costs. Provided by Spencer Tipping at Factual"
@@ -53,16 +75,5 @@
         (reduce + 
           (map (fn [^java.lang.Boolean b]
                  (if (false? b) 1 0))
-            (map (fn [[a b]] (= a b)) char-map)))))))
-
-;; TODO
-
-(defn minkowski-distance [])
-
-(defn levenshtein-distance
-  "The Levenshtein distance between two strings is defined as the minimum number
-   of edits needed to transform one string into the other, with the allowable edit
-   operations being insertion, deletion, or substitution of a single character."
-  [^String s1 ^String s2]
-  (let [m (count s1)
-        n (count s2)]))
+            (map
+              (fn [[a b]] (= a b)) char-map)))))))

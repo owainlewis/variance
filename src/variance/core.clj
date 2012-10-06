@@ -1,6 +1,5 @@
 (ns variance.core
-  {:doc "A collection of useful math/stat functions"}
-  (:use [variance.metrics]))
+  {:doc "A collection of useful math/stat functions"})
 
 ;; **************************
 ;; Dot product 
@@ -55,7 +54,7 @@
   [coll]
   (let [n (count coll)
         sum (reduce * coll)]
-    (Math/pow sum (/ n))))
+    (Math/pow sum (/ n)))) ;; Todo use pow function
 
 (defn median
   {:doc "Returns the median value for a sequence or pair of numbers"}
@@ -104,7 +103,7 @@
 (def  PI         (Math/PI))
 
 (defn pow  [base exponent] (Math/pow base exponent))
-  
+
 (defn variance
   {:doc "Returns the variance for a collection of values.
    A measure of how far a set of numbers is spread out."}
