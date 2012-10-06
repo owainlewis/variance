@@ -1,6 +1,77 @@
 (ns variance.core
   {:doc "A collection of useful math/stat functions"})
 
+(defn sum
+  "Utility function for summing a sequence of values"
+  [& values]
+  (reduce + 0 values))
+
+(defn sqrt [x]   (Math/sqrt x))
+(defn sin  [x]   (Math/sin x))
+(defn cos  [x]   (Math/cos x))
+(defn tan  [x]   (Math/tan x))
+(defn log  [x]   (Math/log x))
+(defn atan [x]   (Math/atan x))
+(defn exp  [x]   (Math/exp x))
+(def  E          (Math/E))
+(def  PI         (Math/PI))
+
+(defn pow  [base exponent] (Math/pow base exponent))
+
+(defn variance
+  {:doc "Returns the variance for a collection of values.
+   A measure of how far a set of numbers is spread out."}
+  [data]
+    (def sqr (fn [x] (* x x)))
+    (let [mv (mean data)]
+      (/
+        (reduce +
+          (map 
+            #(sqr (- % mv)) data))
+              (count data))))
+  
+(defn standard-deviation [data]
+  {:doc "In statistics and probability theory, standard deviation (represented by the symbol sigma, σ)
+   shows how much variation or dispersion exists from the average (mean, or expected value).
+   A low standard deviation indicates that the data points tend to be very close to the mean,
+   whereas high standard deviation indicates that the data points are spread out over a large
+   range of values."}
+  (sqrt (variance data)))
+
+(defn covariance
+  {:doc "Returns the covariance of two data sets"}
+  [data1 data2]
+  (let [n (count data1)
+        mean1 (mean data1)
+        mean2 (mean data2)]
+    (reduce + 
+      (map (fn [[x y]]
+             (let [a (- x mean1)
+                   b (-  y mean2)]
+             (/ (* a b) n)))
+        (zipmap data1 data2)))))
+
+(defn rng
+  ^{:doc "Returns the range for a collection of numbers"}
+  [coll]
+  (let [sorted (sort coll)
+        low (first sorted)
+        high (last sorted)]
+    (- high low)))
+
+(defn values-less-or-equal
+  "Items from values less than or equal to n"
+  [values n]
+  (take-while
+    (fn [x] (<= x n)) values))
+            
+(defn percentile-rank
+  "Calculates the percentile rank for a val in values"
+  [values val]
+  (let [a (count (values-less-or-equal values val))
+        b (count values)]
+    (/ (* 100 a) (double b))))
+
 ;; **************************
 ;; Dot product 
 ;; **************************
@@ -82,81 +153,6 @@
   (take-while 
     (fn [[val freq]]
       (= mxfreq freq)) sorted))))
-
-;; **************************
-;; Useful math functions
-;; **************************
-
-(defn sum
-  "Utility function for summing a sequence of values"
-  [& values]
-  (reduce + 0 values))
-
-(defn sqrt [x]   (Math/sqrt x))
-(defn sin  [x]   (Math/sin x))
-(defn cos  [x]   (Math/cos x))
-(defn tan  [x]   (Math/tan x))
-(defn log  [x]   (Math/log x))
-(defn atan [x]   (Math/atan x))
-(defn exp  [x]   (Math/exp x))
-(def  E          (Math/E))
-(def  PI         (Math/PI))
-
-(defn pow  [base exponent] (Math/pow base exponent))
-
-(defn variance
-  {:doc "Returns the variance for a collection of values.
-   A measure of how far a set of numbers is spread out."}
-  [data]
-    (def sqr (fn [x] (* x x)))
-    (let [mv (mean data)]
-      (/
-        (reduce +
-          (map 
-            #(sqr (- % mv)) data))
-              (count data))))
-  
-(defn standard-deviation [data]
-  {:doc "In statistics and probability theory, standard deviation (represented by the symbol sigma, σ)
-   shows how much variation or dispersion exists from the average (mean, or expected value).
-   A low standard deviation indicates that the data points tend to be very close to the mean,
-   whereas high standard deviation indicates that the data points are spread out over a large
-   range of values."}
-  (sqrt (variance data)))
-
-(defn covariance
-  {:doc "Returns the covariance of two data sets"}
-  [data1 data2]
-  (let [n (count data1)
-        mean1 (mean data1)
-        mean2 (mean data2)]
-    (reduce + 
-      (map (fn [[x y]]
-             (let [a (- x mean1)
-                   b (-  y mean2)]
-             (/ (* a b) n)))
-        (zipmap data1 data2)))))
-
-(defn rng
-  ^{:doc "Returns the range for a collection of numbers"}
-  [coll]
-  (let [sorted (sort coll)
-        low (first sorted)
-        high (last sorted)]
-    (- high low)))
-
-(defn values-less-or-equal
-  "Items from values less than or equal to n"
-  [values n]
-  (take-while
-    (fn [x] (<= x n)) values))
-            
-(defn percentile-rank
-  "Calculates the percentile rank for a val in values"
-  [values val]
-  (let [a (count (values-less-or-equal values val))
-        b (count values)]
-    (/ (* 100 a) (double b))))
 
 ;; **************************
 ;; Distribution
