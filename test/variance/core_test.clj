@@ -28,6 +28,10 @@
          (mode [1 1 2 2 3 3]) => '(1 2 3)
          (mode [1 2.1 2.1 2.3 2.3 3.5]) => '(2.1 2.3)))
 
+(deftest quadratic-formula-test
+  (facts "about quadratic equasions"
+    (quadratic-formula 5 6 1) => [-1.0 -0.2]))
+
 (deftest range-test
 (facts "about rng"
   (rng [3 6 6 6 7 9 11 11 13]) => 10))

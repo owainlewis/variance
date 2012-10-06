@@ -20,6 +20,9 @@
   [x y]
   (reduce + (map * x y)))
 
+(defn add [& values]
+  (reduce + 0 values))
+
 ;; **************************
 ;; Averages
 ;; **************************
@@ -184,6 +187,17 @@
   "A logistic function or logistic sigmoid curve"
   [t]
   (/ 1 (+ 1 (exp t))))
+
+(defn quadratic-formula
+  "Use quadratic formula to solve quadratic equasion for x
+   e.g Solve 5x² + 6x + 1 = 0 -> x = [ -b ± √(b2-4ac) ] / 2a"
+  [a b c]
+  (let [divisor (* 2 a)
+        x (- 0 b)
+        y (Math/sqrt (- (* b b) (* 4 a c)))]
+    (vector 
+     (/ (- x y) divisor)
+     (/ (+ x y) divisor))))
 
 (defn mapstats
   "Inspired by a public gist by Jason Wolfe
