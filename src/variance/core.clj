@@ -44,8 +44,8 @@
   {:doc "Returns the median value for a sequence or pair of numbers"}
   ([coll]
     (let [sorted (sort coll)
-        count (count coll)
-        mid-point (bit-shift-right count 1)]
+          count (count coll)
+          mid-point (bit-shift-right count 1)]
       (if (odd? count)
         (nth sorted mid-point)
         (/ 
@@ -92,11 +92,9 @@
               (count data))))
   
 (defn standard-deviation [data]
-  {:doc "In statistics and probability theory, standard deviation (represented by the symbol sigma, σ)
-   shows how much variation or dispersion exists from the average (mean, or expected value).
-   A low standard deviation indicates that the data points tend to be very close to the mean,
-   whereas high standard deviation indicates that the data points are spread out over a large
-   range of values."}
+  {:doc "In statistics and probability theory, standard deviation (represented by the symbol sigma, σ) shows how much variation or dispersion exists from the average (mean, or expected value).
+  
+  A low standard deviation indicates that the data points tend to be very close to the mean, whereas high standard deviation indicates that the data points are spread out over a large range of values."}
   (sqrt (variance data)))
 
 (defn covariance
@@ -194,22 +192,6 @@
      (/ (- x y) divisor)
      (/ (+ x y) divisor))))
 
-(defn mapstats
-  "Inspired by a public gist by Jason Wolfe
-  Takes a map {:xs xs} and returns a map
-  of simple univariate statistics of xs
-  (mapstats {:xs [1 2 3]})"
-  [{:keys [xs]}]
-  (let [n  (count xs)
-        m  (/ (reduce + xs) n)
-        m2 (/ (reduce + (map #(* % %) xs)) n) 
-        v  (- m2 (* m m))]
-    {:n n   ; count   
-     :m m   ; mean 
-     :m2 m2 ; mean square
-     :v v   ; variance
-    }))
-
 ;; *************************
 ;; Chi Square
 ;; **************************
@@ -227,58 +209,3 @@
              expected)))
     values)))
 
-;; **************************
-;; Binary trees
-;; **************************
-
-;; Using struct maps
-
-(defstruct binary-tree-node :root :left :right)
-
-(defn binary-tree [root]
-  (struct-map binary-tree-node
-    :root root :left nil :right nil))
-
-;; Using defrecord
-
-(defrecord TreeNode
-  [root left right])
-
-(defn tree
-  "Create a tree with a root node set"
-  [root]
-  (TreeNode. root nil nil))
-
-(defn tree-append [t val]
-  (cond
-    ;; Empty tree 
-    (nil? t)          (TreeNode. val nil nil)
-    ;; Go left 
-    (< val (:root t)) (TreeNode. (:root t) (tree-append (:left t) val) (:right t))
-    ;; Go right
-    :else             (TreeNode. (:root t) (:left t) (tree-append (:right t) val))))
-
-(defn in-order-traversal [t]
-  (when t
-    (concat
-      (in-order-traversal (:left t)) [(:root t)]
-      (in-order-traversal (:right t)))))
-
-(defn height
-  "Returns the height of a binary tree"
-  [t]
-  (if (nil? (:root t))
-    0
-    (+ 1
-      (max
-        (height (:left t))
-        (height (:right t))))))
-
-(defn tree-build
-  "Helper function for building binary trees
-   from a sequence of values"
-  [[car & cdr]]
-  (let [t (tree car)]
-    (reduce tree-append t cdr)))
-
-(comment (tree-build [2 4 1 6 7]))
