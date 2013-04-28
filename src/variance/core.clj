@@ -79,6 +79,14 @@
 
 (defn pow  [base exponent] (Math/pow base exponent))
 
+(def log-with-base
+  (fn [base n]
+    (/ (Math/log n) (Math/log base))))
+
+(defn log2
+  "Log base 2 of n"
+  [n] (log-with-base 2 n))
+
 (defn variance
   "Returns the variance for a collection of values.
    A measure of how far a set of numbers is spread out."

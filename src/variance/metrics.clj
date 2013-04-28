@@ -1,8 +1,9 @@
 (ns variance.metrics
   (refer-clojure :exclude [])
+  (:use [variance.core :as core])
   (:use [clojure.set]))
 
-(defn ngrams [n ^String s]
+(defn string-ngrams [n s]
   (into []
     (map (fn [x] (apply str x))
       (partition n 1 s))))
@@ -10,11 +11,11 @@
 ;; Todo redefine this in terms of the dice coefficient abstraction
 (defn dice-coefficient-str [x y]
    {:pre [(and (string? x) (string? y))]}
-   (let [unique-bigrams (map #(into #{} (ngrams 2 %)) (vector x y))
+   (let [unique-bigrams (map #(into #{} (string-ngrams 2 %)) (vector x y))
          [nx ny] (map count unique-bigrams)]
     (double
       (/
-        (variance.core/dot-p [2]
+        (core/dot-p [2]
             [(count (apply clojure.set/intersection unique-bigrams))])
         (reduce + [nx ny])))))
 
@@ -23,8 +24,9 @@
    and is defined as the size of the intersection divided by the size
    of the union of the sample sets."
    [p q]
-   (/ (count (intersection p q))
-        (count (union p))))
+   (let [x (count (intersection p q))
+         y (count (union p))]
+   (/ x y)))
 
 (defn jaccard-distance
   "measures dissimilarity between sample sets, is complementary to the Jaccard
@@ -32,15 +34,14 @@
   [p q] (- 1 (jaccard-index p q)))
 
 (defn euclidean-distance
-  "returns the euclidean distance between two points.
-   Expects a and b to be a set of coordinates [x y]"
+  "Returns the euclidean distance between points x and y
+   where x and y are vectors"
   [p q]
-  (letfn [(square [x] (* x x))]
-    (/ 1 (+ 1 (Math/sqrt
-      (+ (square (- (first p) (first q)))
-        (square (- (second p) (second q)))))))))
-
-;; TODO check this!
+  (let [square (fn [n] (* n n))]
+    (sqrt
+      (->> (map - p q)
+           (map square)
+           (reduce +)))))
 
 (defn manhattan-distance
   "Returns the manhattan/taxicab distance
@@ -104,7 +105,5 @@
     (when (= (count s1) (count s2))
       (let [char-map (zip s1, s2)]
         (reduce +
-          (map (fn [^java.lang.Boolean b]
-                 (if (false? b) 1 0))
-            (map
-             (fn [[a b]] (= a b)) char-map)))))))
+          (map (fn [^java.lang.Boolean b] (if (false? b) 1 0))
+            (map (fn [[a b]] (= a b)) char-map)))))))
