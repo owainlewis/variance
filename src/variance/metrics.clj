@@ -13,11 +13,11 @@
    (let [unique-bigrams (map #(into #{} (ngrams 2 %)) (vector x y))
          [nx ny] (map count unique-bigrams)]
     (double
-      (/ 
+      (/
         (variance.core/dot-p [2]
             [(count (apply clojure.set/intersection unique-bigrams))])
         (reduce + [nx ny])))))
-                 
+
 (defn jaccard-index
   "The Jaccard coefficient measures similarity between sample sets,
    and is defined as the size of the intersection divided by the size
@@ -76,6 +76,22 @@
                                           (+ (insertion-cost-fn a)     (distance a-rest bs)))))]
             (swap! memo-table assoc [as bs] result)
             result)))))
+
+(defn levenshtein
+  "The Levenshtein distance between two strings is defined as the minimum
+  number of edits needed to transform one string into the other, with
+  the allowable edit operations being insertion, deletion, or substitution
+  of a single character"
+  [x y]
+  (let [len1 (count x)
+        len2 (count y)]
+    (cond (zero? len1) len2
+          (zero? len2) len1
+          :else
+          (let [cost (if (= (first x) (first y)) 0 1)]
+            (min (inc (levenshtein (rest x) y))
+                 (inc (levenshtein x (rest y)))
+                 (+ cost (levenshtein (rest x) (rest y))))))))
 
 (defn hamming-distance
   "Measures the minimum number of substitutions required to

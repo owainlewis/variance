@@ -228,3 +228,17 @@
              expected)))
     values)))
 
+;; **************************
+;; Entropy
+;; **************************
+
+(defn shannon-entropy
+  "Calculates the Shannon entropy of a data set"
+  [data]
+  (let [freq (frequencies data)
+        m    (vals freq)
+        n    (reduce + m)]
+  (- (reduce +
+    (map (fn [v]
+           (let [a (/ v n)]
+             (* a (log2 a)))) m)))))
