@@ -1,8 +1,23 @@
 (ns variance.metrics
   (refer-clojure :exclude [])
-  (:use [clojure.set]
-        [variance.core :only [pow]]))
+  (:use [clojure.set]))
 
+(defn ngrams [n ^String s]
+  (into []
+    (map (fn [x] (apply str x))
+      (partition n 1 s))))
+
+;; Todo redefine this in terms of the dice coefficient abstraction
+(defn dice-coefficient-str [x y]
+   {:pre [(and (string? x) (string? y))]}
+   (let [unique-bigrams (map #(into #{} (ngrams 2 %)) (vector x y))
+         [nx ny] (map count unique-bigrams)]
+    (double
+      (/ 
+        (variance.core/dot-p [2]
+            [(count (apply clojure.set/intersection unique-bigrams))])
+        (reduce + [nx ny])))))
+                 
 (defn jaccard-index
   "The Jaccard coefficient measures similarity between sample sets,
    and is defined as the size of the intersection divided by the size
