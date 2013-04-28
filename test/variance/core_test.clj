@@ -4,10 +4,10 @@
         variance.core))
 
 (deftest dot-product-test
-(facts "about dot product"
-  (dot-p [1 3 -5] [4 -2 -1]) => 3
-  (dot-product (double-array [1 3 -5])
-             (double-array [4 -2 -1])) => 3.0))
+  (facts "about dot product"
+    (dot-p [1 3 -5] [4 -2 -1]) => 3
+    (dot-product (double-array [1 3 -5])
+                 (double-array [4 -2 -1])) => 3.0))
 
 (deftest mean-value-test
 (facts "about mean values"
@@ -48,7 +48,7 @@
 (deftest values-less-test
   (facts "about values-less-or-equal"
     (let [data [1 2 3 4 5]]
-      (values-less-or-equal data 3) => '(1 2 3))))      
+      (values-less-or-equal data 3) => '(1 2 3))))
 
 (deftest cdf-test
   (facts "about cumulative-distribution"

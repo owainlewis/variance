@@ -11,7 +11,7 @@
 ;; **************************
 
 (defn arithmetic-mean
-  {:doc "Return the arithmetic mean for a set of values"}
+  "Return the arithmetic mean for a set of values"
   ([coll]
     (double
       (/ (reduce + coll) (count coll))))
@@ -27,11 +27,11 @@
    and to increase the influence of small values."
   ([coll]
      (let [n (count coll)]
-       (double 
-        (/ n (reduce + 
+       (double
+        (/ n (reduce +
                (map #(/ %) coll))))))
   ([x y] (harmonic-mean [x y])))
-     
+
 (defn geometric-mean
   "A type of mean or average, which indicates the central tendency or typical
   value of a set of numbers."
@@ -41,15 +41,15 @@
     (Math/pow sum (/ n)))) ;; Todo use pow function
 
 (defn median
-  {:doc "Returns the median value for a sequence or pair of numbers"}
+  "Returns the median value for a sequence or pair of numbers"
   ([coll]
     (let [sorted (sort coll)
         count (count coll)
         mid-point (bit-shift-right count 1)]
       (if (odd? count)
         (nth sorted mid-point)
-        (/ 
-          (+ (nth sorted mid-point) 
+        (/
+          (+ (nth sorted mid-point)
              (nth sorted (dec mid-point))) 2))))
   ([x y]
      (let [r (range x y)]
@@ -59,11 +59,11 @@
   "A collection of values can have more than one mode in which case it is
    called multimodal or bimodal. Returns the modal value(s)"
   (let [frequency-distribution (frequencies coll)
-        sorted (sort-by 
+        sorted (sort-by
                  (comp - second) frequency-distribution)
         mxfreq (second (first sorted))]
     (map first
-  (take-while 
+  (take-while
     (fn [[val freq]]
       (= mxfreq freq)) sorted))))
 
@@ -80,32 +80,33 @@
 (defn pow  [base exponent] (Math/pow base exponent))
 
 (defn variance
-  {:doc "Returns the variance for a collection of values.
-   A measure of how far a set of numbers is spread out."}
+  "Returns the variance for a collection of values.
+   A measure of how far a set of numbers is spread out."
   [data]
     (def sqr (fn [x] (* x x)))
     (let [mv (mean data)]
       (/
         (reduce +
-          (map 
+          (map
             #(sqr (- % mv)) data))
               (count data))))
-  
-(defn standard-deviation [data]
-  {:doc "In statistics and probability theory, standard deviation (represented by the symbol sigma, σ)
+
+(defn standard-deviation
+  "In statistics and probability theory, standard deviation (represented by the symbol sigma, σ)
    shows how much variation or dispersion exists from the average (mean, or expected value).
    A low standard deviation indicates that the data points tend to be very close to the mean,
    whereas high standard deviation indicates that the data points are spread out over a large
-   range of values."}
+   range of values."
+  [data]
   (sqrt (variance data)))
 
 (defn covariance
-  {:doc "Returns the covariance of two data sets"}
+  "Returns the covariance of two data sets"
   [data1 data2]
   (let [n (count data1)
         mean1 (mean data1)
         mean2 (mean data2)]
-    (reduce + 
+    (reduce +
       (map (fn [[x y]]
              (let [a (- x mean1)
                    b (-  y mean2)]
@@ -113,7 +114,7 @@
         (zipmap data1 data2)))))
 
 (defn rng
-  ^{:doc "Returns the range for a collection of numbers"}
+  "Returns the range for a collection of numbers"
   [coll]
   (let [sorted (sort coll)
         low (first sorted)
@@ -125,7 +126,7 @@
   [values n]
   (take-while
     (fn [x] (<= x n)) values))
-            
+
 (defn percentile-rank
   "Calculates the percentile rank for a val in values"
   [values val]
@@ -134,7 +135,7 @@
     (/ (* 100 a) (double b))))
 
 ;; **************************
-;; Dot product 
+;; Dot product
 ;; **************************
 
 (defn dot-product
@@ -142,7 +143,7 @@
    (def ds (double-array (range 3 20)))"
   [^doubles ws ^doubles xs]
   (areduce ws idx sum (float 0)
-           (+ sum 
+           (+ sum
              (* (aget ws idx)
                 (aget xs idx)))))
 
@@ -163,7 +164,7 @@
   [values val]
   (let [a (count (values-less-or-equal values val))
         b (count values)]
-    (double 
+    (double
      (/ a b))))
 
 ;; A less verbose name for cumulative-frequency-distribution
@@ -190,7 +191,7 @@
   (let [divisor (* 2 a)
         x (- 0 b)
         y (Math/sqrt (- (* b b) (* 4 a c)))]
-    (vector 
+    (vector
      (/ (- x y) divisor)
      (/ (+ x y) divisor))))
 
@@ -202,10 +203,10 @@
   [{:keys [xs]}]
   (let [n  (count xs)
         m  (/ (reduce + xs) n)
-        m2 (/ (reduce + (map #(* % %) xs)) n) 
+        m2 (/ (reduce + (map #(* % %) xs)) n)
         v  (- m2 (* m m))]
-    {:n n   ; count   
-     :m m   ; mean 
+    {:n n   ; count
+     :m m   ; mean
      :m2 m2 ; mean square
      :v v   ; variance
     }))
@@ -220,65 +221,10 @@
    The Chi-square test computes the sum of the squares of the differences in values"
   [values]
   (reduce + 0
-    (map 
+    (map
       (fn [[observed expected]]
         (double
           (/ (pow (- observed expected) 2)
              expected)))
     values)))
 
-;; **************************
-;; Binary trees
-;; **************************
-
-;; Using struct maps
-
-(defstruct binary-tree-node :root :left :right)
-
-(defn binary-tree [root]
-  (struct-map binary-tree-node
-    :root root :left nil :right nil))
-
-;; Using defrecord
-
-(defrecord TreeNode
-  [root left right])
-
-(defn tree
-  "Create a tree with a root node set"
-  [root]
-  (TreeNode. root nil nil))
-
-(defn tree-append [t val]
-  (cond
-    ;; Empty tree 
-    (nil? t)          (TreeNode. val nil nil)
-    ;; Go left 
-    (< val (:root t)) (TreeNode. (:root t) (tree-append (:left t) val) (:right t))
-    ;; Go right
-    :else             (TreeNode. (:root t) (:left t) (tree-append (:right t) val))))
-
-(defn in-order-traversal [t]
-  (when t
-    (concat
-      (in-order-traversal (:left t)) [(:root t)]
-      (in-order-traversal (:right t)))))
-
-(defn height
-  "Returns the height of a binary tree"
-  [t]
-  (if (nil? (:root t))
-    0
-    (+ 1
-      (max
-        (height (:left t))
-        (height (:right t))))))
-
-(defn tree-build
-  "Helper function for building binary trees
-   from a sequence of values"
-  [[car & cdr]]
-  (let [t (tree car)]
-    (reduce tree-append t cdr)))
-
-(comment (tree-build [2 4 1 6 7]))

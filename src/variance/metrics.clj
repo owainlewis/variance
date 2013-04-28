@@ -43,7 +43,7 @@
         manhattan (manhattan-distance p q)]
     {:euclidean euclidean
      :manhattan manhattan}))
-        
+
 (defn distance-function
   "Returns a memoized distance function. You specify the functions that determine insertion and
   replacement costs. Provided by Spencer Tipping at Factual"
@@ -72,8 +72,8 @@
   (letfn [(zip [x y] (map vector x y))]
     (when (= (count s1) (count s2))
       (let [char-map (zip s1, s2)]
-        (reduce + 
+        (reduce +
           (map (fn [^java.lang.Boolean b]
                  (if (false? b) 1 0))
             (map
-              (fn [[a b]] (= a b)) char-map)))))))
+             (fn [[a b]] (= a b)) char-map)))))))
