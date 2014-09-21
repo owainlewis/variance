@@ -203,22 +203,6 @@
      (/ (- x y) divisor)
      (/ (+ x y) divisor))))
 
-(defn mapstats
-  "Inspired by a public gist by Jason Wolfe
-  Takes a map {:xs xs} and returns a map
-  of simple univariate statistics of xs
-  (mapstats {:xs [1 2 3]})"
-  [{:keys [xs]}]
-  (let [n  (count xs)
-        m  (/ (reduce + xs) n)
-        m2 (/ (reduce + (map #(* % %) xs)) n)
-        v  (- m2 (* m m))]
-    {:n n   ; count
-     :m m   ; mean
-     :m2 m2 ; mean square
-     :v v   ; variance
-    }))
-
 ;; *************************
 ;; Chi Square
 ;; **************************
