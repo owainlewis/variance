@@ -6,10 +6,6 @@
   [& values]
   (reduce + 0 values))
 
-;; **************************
-;; Averages
-;; **************************
-
 (defn arithmetic-mean
   "Return the arithmetic mean for a set of values"
   ([coll]
@@ -77,7 +73,7 @@
 (def  E          (Math/E))
 (def  PI         (Math/PI))
 
-(defn pow  [base exponent] (Math/pow base exponent))
+(defn pow [base exponent] (Math/pow base exponent))
 
 (def log-with-base
   (fn [base n]
@@ -142,10 +138,6 @@
         b (count values)]
     (/ (* 100 a) (double b))))
 
-;; **************************
-;; Dot product
-;; **************************
-
 (defn dot-product
   "Pairwise product of two vectors that that works for double arrays
    (def ds (double-array (range 3 20)))"
@@ -163,10 +155,6 @@
 (defn add [& values]
   (reduce + 0 values))
 
-;; **************************
-;; Distribution
-;; **************************
-
 (defn cumulative-distribution-function
   "Similar to percentile rank but returns a probability in the range 0-1"
   [values val]
@@ -174,8 +162,6 @@
         b (count values)]
     (double
      (/ a b))))
-
-;; A less verbose name for cumulative-frequency-distribution
 
 (def cdf cumulative-distribution-function)
 
@@ -203,10 +189,6 @@
      (/ (- x y) divisor)
      (/ (+ x y) divisor))))
 
-;; *************************
-;; Chi Square
-;; **************************
-
 (defn chi-square
   "Assumes data to be in the form
   [[x1 observed, x1 expected] [x2 observed, x2 expected]].
@@ -219,10 +201,6 @@
           (/ (pow (- observed expected) 2)
              expected)))
     values)))
-
-;; **************************
-;; Entropy
-;; **************************
 
 (defn shannon-entropy
   "Calculates the Shannon entropy of a data set"
