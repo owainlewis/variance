@@ -1,14 +1,13 @@
 (ns variance.metrics
   (refer-clojure :exclude [])
-  (:use [variance.core :as core])
-  (:use [clojure.set]))
+  (:require [variance.core :as core]
+            [clojure.set]))
 
 (defn string-ngrams [n s]
   (into []
     (map (fn [x] (apply str x))
       (partition n 1 s))))
 
-;; Todo redefine this in terms of the dice coefficient abstraction
 (defn dice-coefficient-str [x y]
    {:pre [(and (string? x) (string? y))]}
    (let [unique-bigrams (map #(into #{} (string-ngrams 2 %)) (vector x y))
