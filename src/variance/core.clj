@@ -168,10 +168,7 @@
 (defn cdf-range
   "Maps cdf over a range of numbers"
   [values start end]
-  (let [func (partial cdf values)]
-    (map
-      (fn [val] (func val))
-      (range start end))))
+  (map (partial cdf values) (range start end)))
 
 (defn sigmoid
   "A logistic function or logistic sigmoid curve"
